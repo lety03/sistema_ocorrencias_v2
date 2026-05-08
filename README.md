@@ -1,6 +1,6 @@
 # 📊 Sistema de Ocorrências do Ponto
 
-Sistema web para gestão e análise de ocorrências de ponto de funcionários, desenvolvido com **Laravel 12** e **SQLite**. Permite importar planilhas Excel, consultar registros com filtros avançados e visualizar rankings por tipo de ocorrência.
+Sistema web para gestão e análise de ocorrências de ponto de funcionários, desenvolvido com **Laravel 12** e **PostgreSQL** (via Docker). Permite importar planilhas Excel, consultar registros com filtros avançados e visualizar rankings por tipo de ocorrência.
 
 ---
 
@@ -58,7 +58,7 @@ Sistema web para gestão e análise de ocorrências de ponto de funcionários, d
 | ------------ | ----------------------------------------------------------------------- |
 | **Backend**  | PHP 8.2+, Laravel 12                                                    |
 | **Frontend** | Blade Templates, Tailwind CSS (CDN), JavaScript Vanilla                 |
-| **Banco**    | SQLite                                                                  |
+| **Banco**    | PostgreSQL (via Docker)                                                 |
 | **Planilha** | PhpSpreadsheet 5.x (leitura/escrita de Excel)                          |
 | **Design**   | Glassmorphism, Dark Theme, Inter (Google Fonts), Micro-animações        |
 
@@ -115,10 +115,12 @@ cp .env.example .env
 php artisan key:generate
 ```
 
-### 5. Criar e migrar o banco de dados
+### 5. Subir o banco de dados (Docker) e rodar migrations
 
 ```bash
-touch database/database.sqlite
+docker compose up -d
+# Caso dê erro de permissão no Docker, use: sudo docker compose up -d
+
 php artisan migrate
 ```
 
@@ -190,7 +192,7 @@ sistema-ocorrencias/
 │       ├── ConsultaService.php           # Filtros, contagem e geração de Excel
 │       └── PlanilhaService.php           # Parser da planilha Excel (stateful)
 ├── database/
-│   ├── database.sqlite                   # Banco de dados SQLite
+│   ├── database_schema.sql               # Script DDL do banco PostgreSQL
 │   └── migrations/                       # Migrações do schema
 ├── resources/
 │   └── views/

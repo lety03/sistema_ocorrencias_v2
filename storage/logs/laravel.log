@@ -131,3 +131,13 @@
 #28 /home/leticia/Documentos/sistema-ocorrencias/artisan(16): Illuminate\\Foundation\\Application->handleCommand()
 #29 {main}
 "} 
+[2026-05-08 01:10:20] local.ERROR: There are no commands defined in the "sail" namespace. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\NamespaceNotFoundException(code: 0): There are no commands defined in the \"sail\" namespace. at /home/leticia/Documentos/sistema_ocorrenciasv2_1/vendor/symfony/console/Application.php:694)
+[stacktrace]
+#0 /home/leticia/Documentos/sistema_ocorrenciasv2_1/vendor/symfony/console/Application.php(743): Symfony\\Component\\Console\\Application->findNamespace()
+#1 /home/leticia/Documentos/sistema_ocorrenciasv2_1/vendor/symfony/console/Application.php(298): Symfony\\Component\\Console\\Application->find()
+#2 /home/leticia/Documentos/sistema_ocorrenciasv2_1/vendor/symfony/console/Application.php(195): Symfony\\Component\\Console\\Application->doRun()
+#3 /home/leticia/Documentos/sistema_ocorrenciasv2_1/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(198): Symfony\\Component\\Console\\Application->run()
+#4 /home/leticia/Documentos/sistema_ocorrenciasv2_1/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1235): Illuminate\\Foundation\\Console\\Kernel->handle()
+#5 /home/leticia/Documentos/sistema_ocorrenciasv2_1/artisan(16): Illuminate\\Foundation\\Application->handleCommand()
+#6 {main}
+"} 
