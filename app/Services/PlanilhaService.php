@@ -6,6 +6,7 @@ use App\Models\Funcionario;
 use App\Models\Ocorrencia;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class PlanilhaService
 {
@@ -49,10 +50,10 @@ class PlanilhaService
         }
 
         // Regra: Limpar dados antes de inserir nova planilha (somente após validação do cabeçalho)
-        DB::statement('PRAGMA foreign_keys = OFF;');
+        Schema::disableForeignKeyConstraints();
         Ocorrencia::truncate();
         Funcionario::truncate();
-        DB::statement('PRAGMA foreign_keys = ON;');
+        Schema::enableForeignKeyConstraints();
 
         // Regra de leitura: A4 = coligada, C4 = filial
         $coligada = $abaAtiva->getCell('A4')->getValue();
