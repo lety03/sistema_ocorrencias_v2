@@ -18,7 +18,7 @@ class UploadController extends Controller
     public function upload(Request $request)
     {
         $request->validate([
-            'arquivo' => 'required|file|mimes:xls,xlsx|max:10240',
+            'arquivo' => 'required|file|extensions:xls,xlsx|max:10240',
         ], [
             'arquivo.required' => 'O arquivo é obrigatório.',
             'arquivo.file' => 'O arquivo enviado não é válido.',
