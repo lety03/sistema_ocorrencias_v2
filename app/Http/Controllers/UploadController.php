@@ -24,6 +24,10 @@ class UploadController extends Controller
             'arquivo.file' => 'O arquivo enviado não é válido.',
             'arquivo.mimes' => 'Apenas arquivos Excel (.xls, .xlsx) são permitidos.',
         ]);
+        // echo '======================';
+        // print_r($request);
+        // echo '========================';
+        // exit;
 
         try {
             $resultado = $this->planilhaService->processar(
@@ -31,6 +35,7 @@ class UploadController extends Controller
                 $request->file('arquivo')->getClientOriginalName(),
                 auth()->id()
             );
+
 
             return response()->json([
                 'success' => true,
@@ -41,11 +46,19 @@ class UploadController extends Controller
                 ]
             ]);
         } catch (\InvalidArgumentException $e) {
+            // echo '======================';
+            // print_r($e);
+            // echo '========================';
+            // exit;
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage(),
             ], 422);
         } catch (Throwable $e) {
+            // echo '======================';
+            // print_r($e);
+            // echo '========================';
+            // exit;
             return response()->json([
                 'success' => false,
                 'message' => 'Erro ao processar a planilha.',
