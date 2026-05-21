@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Ocorrencia extends Model
 {
     use HasFactory;
-
+    //Tabela ocorrencias
     protected $fillable = [
         'funcionario_id',
         'tipo_ocorrencia',

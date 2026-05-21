@@ -43,16 +43,30 @@ class IndicadorController extends Controller
 
         // Busca todos os funcionários agrupados e ordenados
         $allRanking = Ocorrencia::select(
-                'funcionario_id',
-                DB::raw('COUNT(*) as total_ocorrencias')
-            )
+            'funcionario_id',
+            DB::raw('COUNT(*) as total_ocorrencias')
+        )
             ->where('tipo_ocorrencia', $tipo)
             ->groupBy('funcionario_id')
             ->orderByDesc('total_ocorrencias')
             ->with('funcionario:id,nome,filial,cc_desc,cc,coligada')
             ->get()
-            ->filter(fn ($item) => $item->funcionario !== null)
+            ->filter(fn($item) => $item->funcionario !== null)
             ->values();
+
+        // Calcula a posição (ranking) considerando empates
+        $currentRank = 1;
+        $previousTotal = -1;
+        $realIndex = 1;
+
+        foreach ($allRanking as $item) {
+            if ($previousTotal !== -1 && $item->total_ocorrencias < $previousTotal) {
+                $currentRank = $realIndex;
+            }
+            $item->posicao = $currentRank;
+            $previousTotal = $item->total_ocorrencias;
+            $realIndex++;
+        }
 
         $totalFuncionarios = $allRanking->count();
         $totalPages = max(1, (int) ceil($totalFuncionarios / $perPage));
@@ -65,7 +79,7 @@ class IndicadorController extends Controller
         $offset = ($page - 1) * $perPage;
         $pageItems = $allRanking->slice($offset, $perPage)->values();
 
-        $ranking = $pageItems->map(function ($item, $index) use ($offset) {
+        $ranking = $pageItems->map(function ($item) {
             $cc_desc = $item->funcionario->cc_desc ?? '';
             $cc = $item->funcionario->cc ?? '';
             $centroCusto = trim($cc_desc) && trim($cc)
@@ -73,21 +87,21 @@ class IndicadorController extends Controller
                 : ($cc_desc ?: $cc ?: '-');
 
             return [
-                'posicao'            => $offset + $index + 1,
-                'nome'               => $item->funcionario->nome,
-                'filial'             => $item->funcionario->filial,
-                'centro_custo'       => $centroCusto,
-                'total_ocorrencias'  => $item->total_ocorrencias,
+                'posicao' => $item->posicao,
+                'nome' => $item->funcionario->nome,
+                'filial' => $item->funcionario->filial,
+                'centro_custo' => $centroCusto,
+                'total_ocorrencias' => $item->total_ocorrencias,
             ];
         });
 
         return response()->json([
-            'ranking'            => $ranking,
+            'ranking' => $ranking,
             'total_funcionarios' => $totalFuncionarios,
-            'max'                => $max,
-            'page'               => $page,
-            'per_page'           => $perPage,
-            'total_pages'        => $totalPages,
+            'max' => $max,
+            'page' => $page,
+            'per_page' => $perPage,
+            'total_pages' => $totalPages,
         ]);
     }
 }
